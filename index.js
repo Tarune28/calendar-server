@@ -7,11 +7,7 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json()) // allows us to take in JSON in post body
 app.use(cors()); // allows localhost to communicate with server
 
-const { MongoClient } = require("mongodb");
-// Replace the uri string with your MongoDB deployment's connection string.
-const uri =
-  "mongodb+srv://admin:admin@calendarapp.0jaxe.mongodb.net/CalendarApp?retryWrites=true&w=majority";
-const client = new MongoClient(uri);
+const db = require("./db.js")
 
 ////////////////////// ENDPOINTS
 
@@ -24,32 +20,33 @@ app.get('/', (req, res) => {
 app.post("/event/create", (req, res) => {
   console.log(req.body)
 
-  insertDocument(req.body).then(() => {
+  db.insertDocument(req.body).then((_id) => {
+    res.send({
+      ok: true,
+      _id: _id
+    });
+  });
+});
+
+app.post("/event/delete", (req, res) => {
+  console.log(req.body)
+  db.deleteDocument(req.body._id).then(() => {
     res.send({
       ok: true
     });
   });
 });
 
-////////////////////// DATABASE STUFF
-async function insertDocument(doc) {
-  try {
-    await client.connect();
-    const database = client.db("calendardb");
-    const eventsCollection = database.collection("events");
+app.get("/event/eventinfo", (req, res) => {
+    db.getAllDocuments().then((ans) => {
+    res.send({
+      ok: true,
+      arr: ans
+    });
+  });
+});
 
-    console.log("Inserting doc into database: " + JSON.stringify(doc));
-    const result = await eventsCollection.insertOne(doc);
-
-    if (!result.acknowledged) {
-      throw "Document could not be inserted!";
-    }
-
-    console.log("Inserted!");
-  } finally {
-    await client.close();
-  }
-}
+// db.inventory.deleteOne( { status: "D" } )
 
 // TODO: READ from DB
 
