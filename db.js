@@ -53,24 +53,29 @@ exports.deleteDocument = async function deleteDocument(_id) {
   }
 }
 
-exports.getDocument = async function getDocument(_id) {
-    let result;
-  
+exports.updateDocument = async function updateDocument(doc) {
   try {
     await client.connect();
     const database = client.db("calendardb");
     const eventsCollection = database.collection("events");
-    // ObjectID not defined
-    result = await eventsCollection.findOne( { "_id": ObjectId(_id) } );
-    // db.orders.deleteOne( { "_id" : ObjectId("563237a41a4d68582c2509da") } );
 
-    if (!result.acknowledged) {
-      throw "Document could not be found!";
-    }
+    await eventsCollection.updateOne( {"_id": ObjectId(doc._id) },
+      {
+        $set: {
+          "eventName": doc.eventName,
+          "startTime": doc.startTime,
+          "endTime": doc.endTime,
+          "location": doc.location
+        }
 
+      }
+    
+    
+    )
+
+  
   } finally {
     await client.close();
-
   }
 }
 

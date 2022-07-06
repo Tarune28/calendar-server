@@ -25,6 +25,18 @@ app.post("/event/create", (req, res) => {
       ok: true,
       _id: _id
     });
+
+  });
+});
+
+app.post("/event/update", (req, res) => {
+  console.log(req.body)
+
+  db.updateDocument(req.body).then(() => {
+    res.send({
+      ok: true
+    });
+
   });
 });
 
@@ -37,7 +49,7 @@ app.post("/event/delete", (req, res) => {
   });
 });
 
-app.get("/event/eventinfo", (req, res) => {
+app.get("/event/savedEvents", (req, res) => {
     db.getAllDocuments().then((ans) => {
     res.send({
       ok: true,
