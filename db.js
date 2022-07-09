@@ -84,13 +84,12 @@ exports.getAllDocuments = async function getAllDocuments() {
   //MongoRuntimeError: Connection pool closed
   let results;
 
-
   try {
     await client.connect();
     const database = client.db("calendardb");
     const eventsCollection = database.collection("events");
     await eventsCollection.find({}).toArray().then((ans) => {
-      results = ans
+      results = ans;
     });
 
   } finally {
