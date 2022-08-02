@@ -40,6 +40,17 @@ app.post("/event/update", (req, res) => {
   });
 });
 
+app.post("/event/keep", (req, res) => {
+  console.log(req.body)
+
+  db.keepDocument(req.body).then(() => {
+    res.send({
+      ok: true
+    });
+
+  });
+});
+
 app.post("/event/delete", (req, res) => {
   console.log(req.body)
   db.deleteDocument(req.body._id).then(() => {

@@ -80,6 +80,28 @@ exports.updateDocument = async function updateDocument(doc) {
   }
 }
 
+exports.keepDocument = async function keepDocument(doc) {
+  try {
+    await client.connect();
+    const database = client.db("calendardb");
+    const eventsCollection = database.collection("events");
+
+    await eventsCollection.updateOne( {"_id": ObjectId(doc._id) },
+      {
+        $set: {
+          "keepEvent": true
+        }
+
+      }
+    
+    
+    )
+
+  } finally {
+    await client.close();
+  }
+}
+
 exports.getAllDocuments = async function getAllDocuments() {
 
   //MongoRuntimeError: Connection pool closed
