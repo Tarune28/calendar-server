@@ -53,6 +53,7 @@ exports.deleteDocument = async function deleteDocument(_id) {
   }
 }
 
+
 exports.updateDocument = async function updateDocument(doc) {
   try {
     await client.connect();
@@ -65,7 +66,8 @@ exports.updateDocument = async function updateDocument(doc) {
           "eventName": doc.eventName,
           "startTime": doc.startTime,
           "endTime": doc.endTime,
-          "location": doc.location
+          "location": doc.location,
+          "keepEvent": doc.keepEvent
         }
 
       }
@@ -73,7 +75,6 @@ exports.updateDocument = async function updateDocument(doc) {
     
     )
 
-  
   } finally {
     await client.close();
   }
